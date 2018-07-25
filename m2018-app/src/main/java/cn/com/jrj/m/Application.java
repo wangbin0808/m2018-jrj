@@ -1,0 +1,19 @@
+package cn.com.jrj.m;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
+/**
+ * @Description: 执行入口
+ * @author yuhai.li  
+ * @date 2018年1月19日 下午2:34:31
+ */
+@SpringBootApplication
+@EnableScheduling	//	允许支持定时
+public class Application 
+{
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+}

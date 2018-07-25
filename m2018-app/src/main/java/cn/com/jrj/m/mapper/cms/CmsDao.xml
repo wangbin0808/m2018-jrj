@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.jrj.m.dao.cms.CmsDao">
+  <resultMap id="CmsNews" type="cn.com.jrj.m.domain.CmsNews">
+    <result column="iiid" jdbcType="INTEGER" property="iiid" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="keyword" jdbcType="VARCHAR" property="keyword" />
+    <result column="makedate" jdbcType="TIMESTAMP" property="makeDate" />
+    <result column="listdate" jdbcType="TIMESTAMP" property="listDate" />
+    <result column="papermediasource" jdbcType="VARCHAR" property="paperMediaSource" />
+    <result column="infourl" jdbcType="VARCHAR" property="infoUrl" />
+    <result column="makeman" jdbcType="VARCHAR" property="makeMan" />
+    <result column="leaderette" jdbcType="VARCHAR" property="leaderEtte" />
+    <result column="channum" jdbcType="VARCHAR" property="chanNum" />
+    <result column="infocls" jdbcType="VARCHAR" property="infoCls" />
+    <result column="detail" jdbcType="VARCHAR" property="detail" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="picthumb" jdbcType="VARCHAR" property="picThumb" />
+    <result column="imgurl" jdbcType="VARCHAR" property="imgUrl" />
+    <result column="appinfourl" jdbcType="VARCHAR" property="appInfoUrl" />
+    <result column="minfourl" jdbcType="VARCHAR" property="mInfoUrl" />
+    <result column="rollimportentnew" jdbcType="INTEGER" property="rollImportentNew" />
+    <result column="importentnew" jdbcType="INTEGER" property="importentNew" />
+    <result column="apptop" jdbcType="INTEGER" property="appTop" />
+    <result column="isblod" jdbcType="INTEGER" property="isBlod" />
+    <result column="isred" jdbcType="INTEGER" property="isRed" />
+    <result column="plid" jdbcType="INTEGER" property="plId" />
+    <result column="infostation" jdbcType="INTEGER" property="infoStation" />
+  </resultMap>
+  
+  <resultMap id="InfoStock" type="cn.com.jrj.m.domain.InfoStock">
+    <result column="stockId" jdbcType="VARCHAR" property="stockId" />
+    <result column="stockCode" jdbcType="VARCHAR" property="stockCode" />
+    <result column="stockName" jdbcType="VARCHAR" property="stockName" />
+  </resultMap>
+  
+  <sql id="CmsNewsColumn">
+     iiid, title, author, keyword, rollimportentnew, papermediasource, infourl, importentnew, makeman, leaderette, makedate, level, infostation,  
+listdate, channum, infocls, detail, picthumb , apptop, imgurl, appinfourl, minfourl, isblod, isred, plid
+  </sql>
+  
+  <!-- 根据iiid获取新闻 -->
+  <select id="getNewsByIiid" resultMap="CmsNews">
+	SELECT a.iiid, a.title, a.author, a.keyword, a.rollimportentnew, a.papermediasource, a.infourl, a.importentnew,
+		a.makeman, a.leaderette, a.makedate, a.listdate, a.channum, a.infocls, a.detail, a.picthumb, a.apptop, a.plid, a.level, a.infostation, 
+		b.imgurl, c.appinfourl, c.minfourl, d.isblod, d.isred 
+	FROM INFO_ITEM a 
+		LEFT JOIN info_img b ON a.iiid = b.iiid
+		LEFT JOIN info_ex_app d ON a.iiid = d.iiid
+		LEFT JOIN info_M c ON a.iiid = c.iiid and minfostation=5 
+	WHERE a.iiid=#{iiid} 
+  </select>
+  <!-- 获取前n条新闻，按makedate倒排 -->
+  <select id="topNList" resultMap="CmsNews">
+	SELECT top ${n} a.iiid, a.title, a.author, a.keyword, a.rollimportentnew, a.papermediasource, a.infourl, a.importentnew,
+		a.makeman, a.leaderette, a.makedate, a.listdate, a.channum, a.infocls, a.detail, a.picthumb, a.apptop, a.plid, a.level, a.infostation, 
+		b.imgurl, c.appinfourl, c.minfourl, d.isblod, d.isred 
+	FROM INFO_ITEM a 
+		LEFT JOIN info_img b ON a.iiid = b.iiid
+		LEFT JOIN info_ex_app d ON a.iiid = d.iiid
+		LEFT JOIN info_M c ON a.iiid = c.iiid and minfostation=5
+	WHERE a.infostation=5 
+	ORDER BY a.makedate desc 
+  </select>
+  
+  <!-- 前n条新闻的iiid -->
+  <select id="topNListId" resultType="java.lang.Integer">
+	SELECT top ${n} a.iiid 
+	FROM INFO_ITEM a 
+		LEFT JOIN info_img b ON a.iiid = b.iiid
+		LEFT JOIN info_ex_app d ON a.iiid = d.iiid
+		LEFT JOIN info_M c ON a.iiid = c.iiid and minfostation=5
+	WHERE a.infostation=5 
+	ORDER BY a.makedate desc 
+  </select>
+  
+  <!-- 根据iiid获取相关股票 -->
+  <select id="getInfoStockByIiid" resultMap="InfoStock">
+  	select stockid,stockname,stockcode from info_stock where IIID=#{iiid} 
+  </select>
+
+
+  <!-- 获取前n条7*24小时新闻，按makedate倒排 -->
+  <select id="topNIndexList" resultMap="CmsNews">
+	SELECT top ${n} a.iiid, a.title, a.author, a.keyword, a.rollimportentnew, a.papermediasource, a.infourl, a.importentnew,
+		a.makeman, a.leaderette, a.makedate, a.listdate, a.channum, a.infocls, a.detail, a.picthumb, a.apptop, a.plid, a.level, a.infostation, 
+		b.imgurl, c.appinfourl, c.minfourl, d.isblod, d.isred 
+	FROM INFO_ITEM a 
+		LEFT JOIN info_img b ON a.iiid = b.iiid
+		LEFT JOIN info_ex_app d ON a.iiid = d.iiid
+		LEFT JOIN info_M c ON a.iiid = c.iiid and minfostation=5 
+	where a.rollimportentnew=1 
+	ORDER BY a.makedate desc 
+  </select>
+  
+  <!-- makedate在两日期中间的资讯iiid -->
+  <select id="getIiids" resultType="java.lang.Integer">
+	SELECT a.iiid 
+	FROM INFO_ITEM a 
+		LEFT JOIN info_img b ON a.iiid = b.iiid
+		LEFT JOIN info_ex_app d ON a.iiid = d.iiid
+		LEFT JOIN info_M c ON a.iiid = c.iiid and minfostation=5
+	WHERE a.infostation=5 and makedate between #{lastDate} and #{nextDate}  
+	ORDER BY a.makedate desc 
+  </select>
+  
+    <!-- makedate大于某日期的资讯iiid -->
+  <select id="getNewsIiidLate" resultType="java.lang.Integer">
+	SELECT a.iiid 
+	FROM INFO_ITEM a 
+		LEFT JOIN info_img b ON a.iiid = b.iiid
+		LEFT JOIN info_ex_app d ON a.iiid = d.iiid
+		LEFT JOIN info_M c ON a.iiid = c.iiid and minfostation=5
+	WHERE a.infostation=5 and makedate>=#{makeDate} and a.iiid!=#{iiid} 
+	ORDER BY a.makedate desc 
+  </select>
+
+</mapper>

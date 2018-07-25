@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.jrj.m.dao.cms.CmsDao">
+
+  <!-- 碎片实体 -->
+  <resultMap id="CmsFrag" type="cn.com.jrj.m.domain.CmsFrag">
+    <result column="SpecId" jdbcType="INTEGER" property="specid" />
+    <result column="Intor" jdbcType="VARCHAR" property="intor" />
+    <result column="PubDate" jdbcType="TIMESTAMP" property="pubdate" />
+    <result column="Audik" jdbcType="INTEGER" property="audik" />
+    <result column="Chnmb" jdbcType="VARCHAR" property="chnmb" />
+    <result column="ClsId" jdbcType="VARCHAR" property="clsid" />
+  </resultMap>
+  
+  <select id="getCmsFrags" resultMap="CmsFrag">
+    select SpecId,Intor,PubDate,Audik,Chnmb,ClsId,Sorts from SPEC_ITEM Where Chnmb=#{chnmb} 
+    <if test=" clsids!=null and clsids.length>0 ">
+    	and ClsId in
+		<foreach item="clsid" index="index" collection="clsids"
+			open="(" separator="," close=")">
+			#{clsid}
+		</foreach>
+    </if>
+  </select>
+
+
+</mapper>

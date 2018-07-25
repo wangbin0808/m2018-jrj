@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.jrj.m.dao.pg.PgDao">
+  <resultMap id="Fund" type="cn.com.jrj.m.domain.Fund">
+    <!--
+    @mbggenerated
+    -->
+    <result column="FUND_CODE" jdbcType="VARCHAR" property="fundCode" />
+    
+  </resultMap>
+
+  <select id="top10Fund" resultMap="Fund">
+  	select top 10 FUND_CODE from FND_GEN_INFO where FUND_STATUS in (1,4) order by FUND_CODE  
+  </select>
+
+  <select id="getFundByCode" resultMap="Fund" parameterType="java.lang.String">
+  	select top 1 FUND_CODE from FND_GEN_INFO where FUND_STATUS in (1,4) FUND_CODE=#{fundCode}# 
+  </select>
+
+</mapper>
