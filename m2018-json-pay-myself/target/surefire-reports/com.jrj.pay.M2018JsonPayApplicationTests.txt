@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.jrj.pay.M2018JsonPayApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 34.21 sec - in com.jrj.pay.M2018JsonPayApplicationTests

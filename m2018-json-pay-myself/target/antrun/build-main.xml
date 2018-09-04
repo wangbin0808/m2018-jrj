@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <copy file="E:\gitm2018\m2018-json-pay/target/com.jrj.json.pay-0.0.1-SNAPSHOT.jar" tofile="E:\gitm2018\m2018-json-pay/classes/com.jrj.json.pay-0.0.1-SNAPSHOT.jar" overwrite="true"/>
+</target>
+</project>
